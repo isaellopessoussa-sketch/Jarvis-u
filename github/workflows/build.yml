@@ -1,12 +1,50 @@
-- name: Copiar arquivos para a pasta Android
+name: Compilador Supremo JARVIS OS
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Coletar Código do Repositório
+      uses: actions/checkout@v4
+
+    - name: Inicializar Ambiente Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Configurar Java JDK (Motor do Android)
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Instalar Dependências do Capacitor
+      run: npm install
+
+    - name: Executar Build de Produção
+      run: npm run build
+
+    - name: Sincronizar Plataforma Android
       run: npx cap sync android
 
-    - name: Configurar App para Modo Deitado (Paisagem)
+    - name: Forçar Orientação de Tela (Modo Deitado)
       run: |
         sed -i 's/android:name=".MainActivity"/android:name=".MainActivity" android:screenOrientation="landscape"/' android/app/src/main/AndroidManifest.xml
 
-    - name: Compilar o APK de verdade
+    - name: Compilar Binário APK
       run: |
         cd android
         chmod +x gradlew
         ./gradlew assembleDebug
+
+    - name: Disponibilizar APK para Download
+      uses: actions/upload-artifact@v4
+      with:
+        name: JarvisOS-Quantum
+        path: android/app/build/outputs/apk/debug/app-debug.apk
