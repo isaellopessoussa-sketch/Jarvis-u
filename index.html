@@ -71,71 +71,15 @@
 
         <div class="commands-list">
             <div class="commands-list-title">[DIRETRIZES ATIVAS]</div>
-            <div class="command-item" onclick="executarAcao('abrir câmera')">➢ ABRIR CÂMERA</div>
-            <div class="command-item" onclick="executarAcao('pesquisar homem de ferro')">➢ PESQUISAR [TERMO]</div>
-            <div class="command-item" onclick="executarAcao('ligar modo hacker')">➢ MODO HACKER</div>
-            <div class="command-item" onclick="executarAcao('desativar modo hacker')">➢ MODO STARK</div>
-            <div class="command-item" onclick="executarAcao('que horas são?')">➢ HORÁRIO LOCAL</div>
+            <div class="command-item" onclick="clicouComando('jarvis')">➢ INICIAR SISTEMA</div>
+            <div class="command-item" onclick="clicouComando('abrir câmera')">➢ ABRIR CÂMERA</div>
+            <div class="command-item" onclick="clicouComando('pesquisar homem de ferro')">➢ PESQUISAR GOOGLE</div>
+            <div class="command-item" onclick="clicouComando('ligar modo hacker')">➢ LIGAR MODO HACKER</div>
+            <div class="command-item" onclick="clicouComando('desativar modo hacker')">➢ VOLTAR MODO STARK</div>
+            <div class="command-item" onclick="clicouComando('que horas são?')">➢ HORÁRIO LOCAL</div>
+            <div class="command-item" onclick="clicouComando('limpar')">➢ RESETAR CONSOLE</div>
         </div>
-    </div>
-    
-    <div class="right-panel">
-        <div id="console">
-            <div><span class="label">[SISTEMA]:</span> <span id="status">CONEXÃO ESTÁVEL. AGUARDANDO ORDENS.</span></div>
-            <div style="margin-top: 10px;"><span class="label">[JARVIS]:</span> <span id="resposta">À sua disposição, senhor.</span></div>
-        </div>
-
-        <div class="input-area">
-            <button onclick="ligarMicrofone()" style="background: rgba(0,243,255,0.1);" id="btnVoz">🎙️ Ouvir</button>
-            <input type="text" id="campoTexto" placeholder="Digite ou fale um comando..." onkeypress="checarEnter(event)">
-            <button onclick="enviarTexto()">Executar</button>
-        </div>
-    </div>
-
-    <script>
-        function checarEnter(event) { if (event.key === 'Enter') enviarTexto(); }
-
-        function enviarTexto() {
-            const campo = document.getElementById('campoTexto');
-            const comando = campo.value.trim();
-            if (!comando) return;
-            campo.value = ""; 
-            executarAcao(comando);
-        }
-
-        // Reconhecimento de Voz Atualizado para tentar pular o bloqueio do Capacitor
-        function ligarMicrofone() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                document.getElementById('status').innerText = "SISTEMA: API de voz indisponível neste motor.";
-                return;
-            }
             
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'pt-BR';
-            document.getElementById('status').innerText = "ESCUTANDO COMANDOS ACÚSTICOS...";
-            document.getElementById('btnVoz').innerText = "🛑 Gravando";
-
-            recognition.start();
-
-            recognition.onresult = function(event) {
-                const comandoVoz = event.results[0][0].transcript;
-                executarAcao(comandoVoz);
-                document.getElementById('btnVoz').innerText = "🎙️ Ouvir";
-            };
-
-            recognition.onerror = function(e) {
-                document.getElementById('status').innerText = "ERRO INTERNO: Verifique as permissões de áudio.";
-                document.getElementById('btnVoz').innerText = "🎙️ Ouvir";
-            };
-        }
-
-        // Matriz de Execução dos Novos Comandos Reais
-        function ejecutarAcao(comando) {
-            const t = comando.toLowerCase().trim();
-            document.getElementById('status').innerText = "VETOR DE ENTRADA: \"" + comando.toUpperCase() + "\"";
-            
-            let r = "Diretriz não integrada na minha base local, senhor.";
 
             // 📸 Comando 1: Abrir Câmera do Celular
             if (t.includes("câmera") || t.includes("camera") || t.includes("tirar foto")) {
