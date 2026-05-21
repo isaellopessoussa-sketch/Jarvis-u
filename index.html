@@ -17,25 +17,27 @@
             box-sizing: border-box;
         }
 
-        /* Lado Esquerdo: O Reator Arc */
+        /* Lado Esquerdo: O Reator Arc e Comandos */
         .left-panel {
-            flex: 1;
+            flex: 1.2;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             border-right: 1px dashed rgba(0, 243, 255, 0.3);
+            padding-right: 15px;
         }
         .reactor-container {
             position: relative;
-            width: 140px;
-            height: 140px;
+            width: 110px;
+            height: 110px;
+            margin-top: 10px;
         }
         .reactor { 
             width: 100%; height: 100%; 
             border: 4px double #00f3ff; 
             border-radius: 50%; 
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.5), inset 0 0 30px rgba(0, 243, 255, 0.5); 
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5), inset 0 0 25px rgba(0, 243, 255, 0.5); 
             animation: rotate 12s linear infinite;
         }
         .core {
@@ -44,11 +46,40 @@
             width: 50%; height: 50%;
             background: radial-gradient(circle, #ffffff 0%, #00f3ff 70%, transparent 100%);
             border-radius: 50%;
-            box-shadow: 0 0 40px #00f3ff;
+            box-shadow: 0 0 35px #00f3ff;
             animation: pulse 2s ease-in-out infinite;
         }
-        h1 { font-weight: bold; letter-spacing: 5px; margin: 15px 0 5px; font-size: 24px; text-shadow: 0 0 10px #00f3ff; }
-        .sub-title { color: #475569; font-size: 10px; letter-spacing: 2px; }
+        .title-block { text-align: center; }
+        h1 { font-weight: bold; letter-spacing: 5px; margin: 10px 0 2px; font-size: 22px; text-shadow: 0 0 10px #00f3ff; }
+        .sub-title { color: #475569; font-size: 9px; letter-spacing: 2px; margin-bottom: 15px; }
+
+        /* Lista de Comandos Embutida */
+        .commands-list {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid #1e293b;
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .commands-list-title {
+            color: #64748b;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 3px;
+        }
+        .command-item {
+            padding: 4px 0;
+            color: #38bdf8;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .command-item:hover { color: #ffffff; }
 
         /* Lado Direito: O Console e os Comandos */
         .right-panel {
@@ -113,30 +144,46 @@
 <body>
 
     <div class="left-panel">
-        <div class="reactor-container">
-            <div class="reactor"></div>
-            <div class="core"></div>
+        <div class="title-block">
+            <div class="reactor-container">
+                <div class="reactor"></div>
+                <div class="core"></div>
+            </div>
+            <h1>J.A.R.V.I.S.</h1>
+            <div class="sub-title">HUD INTERFACE v2.6</div>
         </div>
-        <h1>J.A.R.V.I.S.</h1>
-        <div class="sub-title">HUD INTERFACE v2.5</div>
+
+        <div class="commands-list">
+            <div class="commands-list-title">[BANCO DE DIRETRIZES]</div>
+            <div class="command-item" onclick="clicouComando('jarvis')">➢ Jarvis</div>
+            <div class="command-item" onclick="clicouComando('que horas são?')">➢ Que horas são?</div>
+            <div class="command-item" onclick="clicouComando('quem é você?')">➢ Quem é você?</div>
+            <div class="command-item" onclick="clicouComando('protocolo de festa')">➢ Protocolo de Festa</div>
+            <div class="command-item" onclick="clicouComando('limpar')">➢ Limpar Console</div>
+        </div>
     </div>
     
     <div class="right-panel">
         <div id="console">
-            <div><span class="label">[SISTEMA]:</span> <span id="status">CONEXÃO ESTÁVEL. AGUARDANDO COMANDO TEXTUAL SENHOR.</span></div>
-            <div style="margin-top: 10px;"><span class="label">[JARVIS]:</span> <span id="resposta">Pronto para digitação.</span></div>
+            <div><span class="label">[SISTEMA]:</span> <span id="status">CONEXÃO ESTÁVEL. DIRETRIZES DISPONÍVEIS NO MENU LATERAL.</span></div>
+            <div style="margin-top: 10px;"><span class="label">[JARVIS]:</span> <span id="resposta">Aguardando ordens, senhor.</span></div>
         </div>
 
         <div class="input-area">
-            <input type="text" id="campoTexto" placeholder="Digite uma ordem para o Jarvis..." onkeypress="checarEnter(event)">
+            <input type="text" id="campoTexto" placeholder="Digite uma ordem ou toque em um comando..." onkeypress="checarEnter(event)">
             <button onclick="enviarComando()">Enviar</button>
         </div>
     </div>
 
     <script>
-        // Lógica de envio e processamento de comandos
         function checarEnter(event) {
             if (event.key === 'Enter') enviarComando();
+        }
+
+        // Se o usuário tocar no comando da lista, já digita e envia sozinho!
+        function clicouComando(textoComando) {
+            document.getElementById('campoTexto').value = textoComando;
+            enviarComando();
         }
 
         function enviarComando() {
@@ -145,10 +192,12 @@
             if (!comando) return;
 
             document.getElementById('status').innerText = "PROCESSANDO DIRETRIZ: \"" + comando.toUpperCase() + "\"";
-            campo.value = ""; // Limpa a caixa
+            campo.value = ""; 
 
-            function processarTexto(texto) {
-            // Isso limpa espaços e transforma tudo em minúsculo para não dar erro!
+            processarTexto(comando);
+        }
+
+        function processarTexto(texto) {
             const t = texto.toLowerCase().trim();
             let r = "Comando não reconhecido nos bancos de dados locais, senhor.";
             
@@ -167,4 +216,16 @@
 
             document.getElementById('resposta').innerText = r;
             falar(r);
+        }
+
+        function falar(textoParaFalar) {
+            if ('speechSynthesis' in window) {
+                const fala = new SpeechSynthesisUtterance(textoParaFalar);
+                fala.lang = 'pt-BR';
+                fala.rate = 1.15;
+                window.speechSynthesis.speak(fala);
             }
+        }
+    </script>
+</body>
+</html>
