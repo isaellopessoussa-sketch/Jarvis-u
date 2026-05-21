@@ -1,0 +1,50 @@
+name: Construir APK do Jarvis
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Pegar código do repositório
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-with: 20
+        cache: 'npm'
+
+    - name: Instalar o Java (JDK 17)
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Instalar dependências do app
+      run: |
+        npm install
+        npm run build
+
+    - name: Inicializar o Capacitor para Android
+      run: |
+        npx cap init jarvis-app com.seunome.jarvis --web-dir=www
+        npx cap add android
+
+    - name: Copiar arquivos para a pasta Android
+      run: npx cap sync android
+
+    - name: Compilar o APK de verdade
+      run: |
+        cd android
+        chmod +x gradlew
+        ./gradlew assembleDebug
+
+    - name: Disponibilizar o APK para download
+      uses: actions/upload-artifact@v4
+      with:
+        name: Jarvis-Instalador
+        path: android/app/build/outputs/apk/debug/app-debug.apk
