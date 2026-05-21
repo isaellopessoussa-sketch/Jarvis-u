@@ -147,19 +147,19 @@
             document.getElementById('status').innerText = "PROCESSANDO DIRETRIZ: \"" + comando.toUpperCase() + "\"";
             campo.value = ""; // Limpa a caixa
 
-            processarTexto(comando);
-        }
-
-        function processarTexto(texto) {
-            const t = texto.toLowerCase();
+            function processarTexto(texto) {
+            // Isso limpa espaços e transforma tudo em minúsculo para não dar erro!
+            const t = texto.toLowerCase().trim();
             let r = "Comando não reconhecido nos bancos de dados locais, senhor.";
             
-            if (t.includes("olá") || t.includes("jarvis") || t.includes("acorda")) {
+            if (t.includes("olá") || t.includes("jarvis") || t.includes("acorda") || t === "oi") {
                 r = "Olá senhor. Todos os sistemas centrais estão online e operando em perfeita simetria.";
-            } else if (t.includes("horas") || t.includes("tempo")) {
+            } else if (t.includes("horas") || t.includes("tempo") || t.includes("que horas são")) {
                 r = "De acordo com os relógios internos, são exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-            } else if (t.includes("protocolo de festa")) {
-                r = "Protocolo de festa iniciado. Desbravando arquivos de áudio e preparando iluminação ambiente.";
+            } else if (t.includes("protocolo de festa") || t.includes("festa")) {
+                r = "Protocolo de festa iniciado. Desbravando arquivos de áudio e preparando iluminação ambiente de Stark.";
+            } else if (t.includes("quem é você") || t.includes("seu nome")) {
+                r = "Eu sou o J.A.R.V.I.S., o seu assistente virtual pessoal de inteligência artificial.";
             } else if (t.includes("limpar") || t.includes("clear")) {
                 r = "Console redefinido.";
                 document.getElementById('status').innerText = "AGUARDANDO NOVA DIRETRIZ.";
@@ -167,16 +167,4 @@
 
             document.getElementById('resposta').innerText = r;
             falar(r);
-        }
-
-        function falar(textoParaFalar) {
-            if ('speechSynthesis' in window) {
-                const fala = new SpeechSynthesisUtterance(textoParaFalar);
-                fala.lang = 'pt-BR';
-                fala.rate = 1.15;
-                window.speechSynthesis.speak(fala);
             }
-        }
-    </script>
-</body>
-</html>
