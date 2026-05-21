@@ -1,4 +1,4 @@
-# 🤖 J.A.R.V.I.S. — HUD OS v3.0
+# 🤖 J.A.R.V.I.S. — HUD OS v4.0
 
 <p align="center">
   <img src="https://img.shields.io/badge/STATUS-OPERACIONAL-00f3ff?style=for-the-badge&logo=android&logoColor=white" alt="Status"/>
@@ -8,26 +8,28 @@
 
 ---
 
-## 🌌 Visão Geral do Sistema
-O **J.A.R.V.I.S.** (Just A Rather Very Intelligent System) é um assistente virtual pessoal em formato de painel holográfico tátil (*HUD*), desenvolvido diretamente pelo navegador de um dispositivo móvel e empacotado nativamente para Android. 
+## 🌌 Interface de Comando Global
+Abaixo está o registro visual do painel tátil holográfico em modo paisagem, integrando a matriz de monitoramento global ao reator Arc central:
 
-Este projeto recria a interface clássica das armaduras do Homem de Ferro (*Marvel Studios*) com recursos modernos de automação e renderização leve.
+<p align="center">
+  <img src="https://images.prodia.xyz/82672ea4-4861-46bd-8da9-ca821815bc8a.png" width="800" alt="Jarvis HUD Interface"/>
+</p>
 
 ---
 
-## ⚡ Recursos Ativados (Firmware v3.0)
+## ⚡ Recursos Ativados (Firmware v4.0)
 
-* **🎬 Estética Marvel Studios:** Efeito de varredura de tela (*Scanlines*) e partículas de energia flutuantes renderizadas em tempo real.
-* **🌌 Interface Holográfica:** Cores em degradê azul neon, Reator Arc animado no painel central e transições suaves de fade-in.
-* **📱 Arquitetura Paisagem:** Travamento automático do aplicativo em modo horizontal para melhor aproveitamento do console de dados.
-* **🔊 Módulo de Voz Integrado:** Respostas por síntese de voz artificial (*Text-to-Speech*) em português com modulação elegante.
-* **⌨️ Banco de Diretrizes Tátil:** Menu lateral esquerdo contendo comandos rápidos acionáveis por clique direto.
+* **🌍 Globo Holográfico Global:** Mapa-múndi em estilo aramado (*wireframe*) neon com rotação simulada de satélites.
+* **🎬 Estética Marvel Studios:** Efeito de varredura de tela (*Scanlines*) e partículas de energia flutuantes baseadas nos laboratórios Stark.
+* **📱 Arquitetura Paisagem Profissional:** Travamento automático em modo horizontal para melhor leitura de dados e console expandido.
+* **🔊 Módulo de Voz Integrado:** Respostas automáticas por síntese de voz artificial (*Text-to-Speech*) modulada.
+* **⌨️ Banco de Diretrizes Tátil:** Menu rápido contendo comandos essenciais acionáveis por clique na tela.
 
 ---
 
 ## 📊 Matriz de Comandos Locais
 
-Envie os seguintes vetores de texto pelo console ou clique no menu lateral para acionar as diretrizes:
+Envie os seguintes vetores de texto pelo console ou clique nas diretrizes para acionar as respostas:
 
 | Comando Aceito | Resposta do Sistema / Ação |
 | :--- | :--- |
@@ -41,11 +43,9 @@ Envie os seguintes vetores de texto pelo console ou clique no menu lateral para 
 
 ## 🏗️ Motor de Desenvolvimento e Compilação
 
-O aplicativo utiliza uma engenharia modular leve para converter código web em binário de celular sem necessidade de softwares pesados locais:
-
-* **Front-end:** HTML5, CSS3 Avançado (Keyframes, Glassmorphism) e JavaScript Puro (Vanilla).
+* **Front-end:** HTML5, CSS3 Avançado (Keyframes, Glassmorphism) e JavaScript Puro.
 * **Empacotamento:** Framework **Capacitor.js** integrado com Android SDK.
-* **Fábrica Automatizada:** **GitHub Actions** (Workflow em Ubuntu) compilando o `.apk` em nuvem em menos de 5 minutos.
+* **Fábrica Automatizada:** **GitHub Actions** (Workflow em Ubuntu) compilando o `.apk` em nuvem.
 
 ---
 
