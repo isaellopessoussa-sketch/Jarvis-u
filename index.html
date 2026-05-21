@@ -3,292 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JARVIS HUD OS</title>
+    <title>JARVIS MAINFRAME</title>
     <style>
-        /* Fundo Holográfico e Efeitos Marvel */
+        /* Base Holográfica */
         body { 
             background: radial-gradient(circle at center, #06152d 0%, #020617 100%); 
             color: #00f3ff; 
             font-family: 'Courier New', Courier, monospace; 
-            padding: 20px; 
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            height: 100vh;
-            box-sizing: border-box;
-            position: relative;
+            padding: 20px; margin: 0; overflow: hidden; display: flex; height: 100vh; box-sizing: border-box; position: relative;
+            transition: all 0.5s ease;
         }
 
-        /* Scanline Animada de Cinema */
-        body::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.08) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            z-index: 10;
-            background-size: 100% 4px, 6px 100%;
-            pointer-events: none;
-        }
-
+        /* Scanline Cinema */
         body::after {
-            content: "";
-            position: absolute;
-            width: 100%; height: 5px;
-            background: rgba(0, 243, 255, 0.2);
-            animation: scanline 6s linear infinite;
-            z-index: 11;
-            pointer-events: none;
-            box-shadow: 0 0 10px #00f3ff;
+            content: ""; position: absolute; width: 100%; height: 4px; background: rgba(0, 243, 255, 0.15);
+            animation: scanline 6s linear infinite; z-index: 11; pointer-events: none; box-shadow: 0 0 8px #00f3ff;
         }
 
-        /* Partículas Flutuantes no Fundo */
-        .particles {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: 1;
-            pointer-events: none;
+        /* MODO HACKER (Ativado via Classe) */
+        body.hacker-mode {
+            background: radial-gradient(circle at center, #051a05 0%, #000500 100%) !important;
+            color: #00ff00 !important;
         }
-        .particle {
-            position: absolute;
-            background: rgba(0, 243, 255, 0.4);
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00f3ff;
-            animation: floatUp 8s ease-in-out infinite;
-        }
+        body.hacker-mode ::after { background: rgba(0, 255, 0, 0.2) !important; box-shadow: 0 0 8px #00ff00 !important; }
+        body.hacker-mode .reactor { border-color: #00ff00 !important; box-shadow: 0 0 25px rgba(0, 255, 0, 0.4), inset 0 0 25px rgba(0, 255, 0, 0.4) !important; }
+        body.hacker-mode .core { background: radial-gradient(circle, #ffffff 0%, #00ff00 70%, transparent 100%) !important; box-shadow: 0 0 35px #00ff00 !important; }
+        body.hacker-mode button { border-color: #00ff00 !important; color: #00ff00 !important; text-shadow: 0 0 5px #00ff00 !important; }
+        body.hacker-mode #console { border-color: rgba(0, 255, 0, 0.3) !important; border-left-color: #00ff00 !important; }
+        body.hacker-mode .command-item { color: #22c55e !important; }
 
-        /* Painel Esquerdo com Transição Suave */
-        .left-panel {
-            flex: 1.2;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            border-right: 1px dashed rgba(0, 243, 255, 0.2);
-            padding-right: 15px;
-            z-index: 5;
-            animation: fadeIn 1s ease-out;
-        }
-
-        .reactor-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin-top: 10px;
-        }
-        .reactor { 
-            width: 100%; height: 100%; 
-            border: 4px double #00f3ff; 
-            border-radius: 50%; 
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.4), inset 0 0 25px rgba(0, 243, 255, 0.4); 
-            animation: rotate 15s linear infinite;
-        }
-        .core {
-            position: absolute;
-            top: 25%; left: 25%;
-            width: 50%; height: 50%;
-            background: radial-gradient(circle, #ffffff 0%, #00f3ff 70%, transparent 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 35px #00f3ff;
-            animation: pulse 2s ease-in-out infinite;
-        }
+        /* Painel Esquerdo */
+        .left-panel { flex: 1.2; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-right: 1px dashed rgba(0, 243, 255, 0.2); padding-right: 15px; z-index: 5; }
+        .reactor-container { position: relative; width: 110px; height: 110px; margin-top: 10px; }
+        .reactor { width: 100%; height: 100%; border: 4px double #00f3ff; border-radius: 50%; box-shadow: 0 0 25px rgba(0, 243, 255, 0.4), inset 0 0 25px rgba(0, 243, 255, 0.4); animation: rotate 15s linear infinite; }
+        .core { position: absolute; top: 25%; left: 25%; width: 50%; height: 50%; background: radial-gradient(circle, #ffffff 0%, #00f3ff 70%, transparent 100%); border-radius: 50%; box-shadow: 0 0 35px #00f3ff; animation: pulse 2s ease-in-out infinite; }
+        h1 { font-weight: bold; letter-spacing: 5px; margin: 10px 0 2px; font-size: 22px; text-shadow: 0 0 10px currentColor; }
         
-        h1 { font-weight: bold; letter-spacing: 5px; margin: 10px 0 2px; font-size: 22px; text-shadow: 0 0 10px #00f3ff; }
-        .sub-title { color: #475569; font-size: 9px; letter-spacing: 2px; margin-bottom: 15px; }
+        /* Lista de Diretrizes */
+        .commands-list { background: rgba(6, 21, 45, 0.3); border: 1px solid rgba(0, 243, 255, 0.2); width: 100%; padding: 10px; border-radius: 6px; font-size: 11px; box-sizing: border-box; }
+        .commands-list-title { color: #64748b; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; border-bottom: 1px dashed rgba(0,243,255,0.2); padding-bottom: 3px; }
+        .command-item { padding: 4px 0; color: #38bdf8; cursor: pointer; transition: 0.2s; }
+        .command-item:hover { color: #ffffff; transform: translateX(3px); }
 
-        /* Menu Holográfico de Diretrizes */
-        .commands-list {
-            background: rgba(6, 21, 45, 0.4);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            width: 100%;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
-            backdrop-filter: blur(4px);
-        }
-        .commands-list-title {
-            color: #64748b;
-            font-weight: bold;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-bottom: 1px dashed rgba(0, 243, 255, 0.3);
-            padding-bottom: 5px;
-        }
-        .command-item {
-            padding: 6px 0;
-            color: #38bdf8;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-        }
-        .command-item:hover { 
-            color: #ffffff; 
-            text-shadow: 0 0 8px #00f3ff;
-            transform: translateX(5px);
-        }
-
-        /* Lado Direito: Console de Inteligência */
-        .right-panel {
-            flex: 2;
-            display: flex;
-            flex-direction: column;
-            padding-left: 20px;
-            justify-content: space-between;
-            z-index: 5;
-            animation: fadeIn 1.5s ease-out;
-        }
-        #console {
-            background: rgba(2, 6, 23, 0.7);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            border-left: 4px solid #00f3ff;
-            padding: 15px;
-            flex-grow: 1;
-            text-align: left;
-            font-size: 13px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.05), 0 4px 20px rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-        }
+        /* Painel Direito */
+        .right-panel { flex: 2; display: flex; flex-direction: column; padding-left: 20px; justify-content: space-between; z-index: 5; }
+        #console { background: rgba(2, 6, 23, 0.7); border: 1px solid rgba(0, 243, 255, 0.2); border-left: 4px solid currentColor; padding: 15px; flex-grow: 1; text-align: left; font-size: 13px; overflow-y: auto; margin-bottom: 15px; }
         .label { color: #475569; font-weight: bold; }
         
-        /* Input Futurista Neon */
+        /* Inputs */
         .input-area { display: flex; gap: 10px; }
-        input[type="text"] {
-            flex-grow: 1;
-            background: rgba(2, 6, 23, 0.8);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            color: #00f3ff;
-            padding: 12px;
-            font-family: inherit;
-            border-radius: 4px;
-            outline: none;
-            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
-            transition: all 0.3s ease;
-        }
-        input[type="text"]:focus {
-            border-color: #00f3ff;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-        button { 
-            background: rgba(0, 243, 255, 0.05); 
-            border: 1px solid #00f3ff; 
-            color: #00f3ff; 
-            padding: 0 25px; 
-            border-radius: 4px; 
-            font-size: 13px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            letter-spacing: 2px;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            text-shadow: 0 0 5px #00f3ff;
-        }
-        button:hover { background: rgba(0, 243, 255, 0.2); box-shadow: 0 0 10px #00f3ff; }
+        input[type="text"] { flex-grow: 1; background: rgba(2, 6, 23, 0.8); border: 1px solid rgba(0, 243, 255, 0.3); color: inherit; padding: 12px; font-family: inherit; border-radius: 4px; outline: none; }
+        button { background: rgba(0, 243, 255, 0.05); border: 1px solid currentColor; color: inherit; padding: 0 20px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; }
+        button:hover { background: rgba(0, 243, 255, 0.1); }
 
-        /* Animações Core (Marvel Style) */
         @keyframes rotate { 100% { transform: rotate(360deg); } }
-        @keyframes pulse { 0%, 100% { transform: scale(0.95); filter: brightness(1); } 50% { transform: scale(1.05); filter: brightness(1.3); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%, 100% { transform: scale(0.95); } 50% { transform: scale(1.05); } }
         @keyframes scanline { from { top: -5px; } to { top: 100%; } }
-        @keyframes floatUp {
-            0% { transform: translateY(105vh) translateX(0px); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-5vh) translateX(20px); opacity: 0; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="particles" id="particleField"></div>
-
     <div class="left-panel">
-        <div class="title-block">
-            <div class="reactor-container">
-                <div class="reactor"></div>
-                <div class="core"></div>
-            </div>
-            <h1>J.A.R.V.I.S.</h1>
-            <div class="sub-title">STARK HUD INTERFACE v3.0</div>
+        <div style="text-align: center;">
+            <div class="reactor-container"><div class="reactor"></div><div class="core"></div></div>
+            <h1 id="appTitle">J.A.R.V.I.S.</h1>
         </div>
 
         <div class="commands-list">
             <div class="commands-list-title">[DIRETRIZES ATIVAS]</div>
-            <div class="command-item" onclick="clicouComando('jarvis')">➢ INICIAR SISTEMA</div>
-            <div class="command-item" onclick="clicouComando('que horas são?')">➢ HORÁRIO LOCAL</div>
-            <div class="command-item" onclick="clicouComando('quem é você?')">➢ IDENTIFICAÇÃO</div>
-            <div class="command-item" onclick="clicouComando('protocolo de festa')">➢ PROTOCOLO DE FESTA</div>
-            <div class="command-item" onclick="clicouComando('limpar')">➢ RESETAR CONSOLE</div>
+            <div class="command-item" onclick="executarAcao('abrir câmera')">➢ ABRIR CÂMERA</div>
+            <div class="command-item" onclick="executarAcao('pesquisar homem de ferro')">➢ PESQUISAR [TERMO]</div>
+            <div class="command-item" onclick="executarAcao('ligar modo hacker')">➢ MODO HACKER</div>
+            <div class="command-item" onclick="executarAcao('desativar modo hacker')">➢ MODO STARK</div>
+            <div class="command-item" onclick="executarAcao('que horas são?')">➢ HORÁRIO LOCAL</div>
         </div>
     </div>
     
     <div class="right-panel">
         <div id="console">
-            <div><span class="label">[SISTEMA]:</span> <span id="status">MATRIZ HOLOGRÁFICA INICIALIZADA. AGUARDANDO ORDENS.</span></div>
+            <div><span class="label">[SISTEMA]:</span> <span id="status">CONEXÃO ESTÁVEL. AGUARDANDO ORDENS.</span></div>
             <div style="margin-top: 10px;"><span class="label">[JARVIS]:</span> <span id="resposta">À sua disposição, senhor.</span></div>
         </div>
 
         <div class="input-area">
-            <input type="text" id="campoTexto" placeholder="Digite uma ordem ou clique no painel..." onkeypress="checarEnter(event)">
-            <button onclick="enviarComando()">Executar</button>
+            <button onclick="ligarMicrofone()" style="background: rgba(0,243,255,0.1);" id="btnVoz">🎙️ Ouvir</button>
+            <input type="text" id="campoTexto" placeholder="Digite ou fale um comando..." onkeypress="checarEnter(event)">
+            <button onclick="enviarTexto()">Executar</button>
         </div>
     </div>
 
     <script>
-        // Criador Dinâmico de Partículas da Armadura
-        const field = document.getElementById('particleField');
-        for (let i = 0; i < 15; i++) {
-            let p = document.createElement('div');
-            p.className = 'particle';
-            p.style.width = p.style.height = Math.random() * 4 + 2 + 'px';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.animationDelay = Math.random() * 6 + 's';
-            p.style.animationDuration = Math.random() * 5 + 6 + 's';
-            field.appendChild(p);
-        }
+        function checarEnter(event) { if (event.key === 'Enter') enviarTexto(); }
 
-        function checarEnter(event) {
-            if (event.key === 'Enter') enviarComando();
-        }
-
-        function clicouComando(textoComando) {
-            document.getElementById('campoTexto').value = textoComando;
-            enviarComando();
-        }
-
-        function enviarComando() {
+        function enviarTexto() {
             const campo = document.getElementById('campoTexto');
             const comando = campo.value.trim();
             if (!comando) return;
-
-            document.getElementById('status').innerText = "VETOR DE DADOS: \"" + comando.toUpperCase() + "\"";
             campo.value = ""; 
-
-            processarTexto(comando);
+            executarAcao(comando);
         }
 
-        function processarTexto(texto) {
-            const t = texto.toLowerCase().trim();
-            let r = "Diretriz não catalogada no núcleo local, senhor.";
+        // Reconhecimento de Voz Atualizado para tentar pular o bloqueio do Capacitor
+        function ligarMicrofone() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                document.getElementById('status').innerText = "SISTEMA: API de voz indisponível neste motor.";
+                return;
+            }
             
-            if (t.includes("olá") || t.includes("jarvis") || t.includes("acorda") || t === "oi" || t.includes("iniciar")) {
-                r = "Sistemas operando com cem por cento de eficiência energética. É bom ver o senhor.";
-            } else if (t.includes("horas") || t.includes("tempo") || t.includes("horário")) {
-                r = "Análise temporal concluída. São exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) + " no fuso local.";
-            } else if (t.includes("protocolo de festa") || t.includes("festa")) {
-                r = "Protocolo de festa ativo. Todas as armaduras secundárias receberam ordens de decolagem imediata.";
-            } else if (t.includes("quem é você") || t.includes("identificação")) {
-                r = "Eu sou o Jarvis. Uma interface de computação baseada em linguagem neural altamente avançada.";
-            } else if (t.includes("limpar") || t.includes("resetar")) {
-                r = "Interface limpa.";
-                document.getElementById('status').innerText = "AGUARDANDO NOVA DIRETRIZ.";
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR';
+            document.getElementById('status').innerText = "ESCUTANDO COMANDOS ACÚSTICOS...";
+            document.getElementById('btnVoz').innerText = "🛑 Gravando";
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const comandoVoz = event.results[0][0].transcript;
+                executarAcao(comandoVoz);
+                document.getElementById('btnVoz').innerText = "🎙️ Ouvir";
+            };
+
+            recognition.onerror = function(e) {
+                document.getElementById('status').innerText = "ERRO INTERNO: Verifique as permissões de áudio.";
+                document.getElementById('btnVoz').innerText = "🎙️ Ouvir";
+            };
+        }
+
+        // Matriz de Execução dos Novos Comandos Reais
+        function ejecutarAcao(comando) {
+            const t = comando.toLowerCase().trim();
+            document.getElementById('status').innerText = "VETOR DE ENTRADA: \"" + comando.toUpperCase() + "\"";
+            
+            let r = "Diretriz não integrada na minha base local, senhor.";
+
+            // 📸 Comando 1: Abrir Câmera do Celular
+            if (t.includes("câmera") || t.includes("camera") || t.includes("tirar foto")) {
+                r = "Entendido, senhor. Inicializando hardware óptico e abrindo câmera do dispositivo.";
+                document.getElementById('resposta').innerText = r;
+                falar(r);
+                setTimeout(() => {
+                    window.location.href = "intent://#Intent;action=android.media.action.IMAGE_CAPTURE;end";
+                }, 1500);
+                return;
+            }
+
+            // 🔍 Comando 2: Pesquisar no Google através do App
+            if (t.startsWith("pesquisar ") || t.startsWith("procure por ")) {
+                const termo = t.replace("pesquisar ", "").replace("procure por ", "");
+                r = `Buscando dados sobre ${termo} na rede mundial, senhor.`;
+                document.getElementById('resposta').innerText = r;
+                falar(r);
+                setTimeout(() => {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(termo)}`, '_blank');
+                }, 1500);
+                return;
+            }
+
+            // 💚 Comando 3: Ligar Modo Hacker
+            if (t.includes("modo hacker") || t.includes("hacker")) {
+                r = "Protocolo de invasão ativado. Redirecionando energia para a criptografia e alterando espectro visual para Matrix.";
+                document.body.classList.add('hacker-mode');
+                document.getElementById('appTitle').innerText = "M.A.I.N.F.R.A.M.E.";
+            } 
+            // 💙 Desativar Modo Hacker
+            else if (t.includes("modo stark") || t.includes("desativar modo hacker") || t.includes("voltar ao normal")) {
+                r = "Desativando protocolos secundários. Restaurando interface de operação padrão das Indústrias Stark.";
+                document.body.classList.remove('hacker-mode');
+                document.getElementById('appTitle').innerText = "J.A.R.V.I.S.";
+            }
+            // Comandos Clássicos de apoio
+            else if (t.includes("olá") || t.includes("jarvis") || t.includes("iniciar")) {
+                r = "Sistemas operando com estabilidade total. Que bom ver o senhor de volta.";
+            } else if (t.includes("horas") || t.includes("tempo")) {
+                r = "Análise concluída. São exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) + ".";
             }
 
             document.getElementById('resposta').innerText = r;
@@ -297,6 +185,7 @@
 
         function falar(textoParaFalar) {
             if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Para a fala anterior se houver
                 const fala = new SpeechSynthesisUtterance(textoParaFalar);
                 fala.lang = 'pt-BR';
                 fala.rate = 1.15;
