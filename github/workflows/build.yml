@@ -35,7 +35,12 @@ jobs:
         npx cap add android
 
     - name: Copiar arquivos para a pasta Android
+      - name: Copiar arquivos para a pasta Android
       run: npx cap sync android
+
+    - name: Injetar permissão de Microfone no Android
+      run: |
+        sed -i '/<\/manifest>/i \    <uses-permission android:name="android.permission.RECORD_AUDIO" />' android/app/src/main/AndroidManifest.xml
 
     - name: Compilar o APK de verdade
       run: |
