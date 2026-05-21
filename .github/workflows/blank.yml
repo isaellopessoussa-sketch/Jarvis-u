@@ -1,36 +1,56 @@
-# This is a basic workflow to help you get started with Actions
+name: Construir APK do Jarvis
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch: # Permite que você clique para rodar manualmente se quiser
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+    - name: Pegar código do repositório
+      uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    - name: Instalar o Java (JDK 17)
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Criar arquivos base se não existirem
+      run: |
+        if [ ! -f package.json ]; then
+          echo '{"name": "jarvis-app","version": "1.0.0","main": "index.html","scripts": {"build": "mkdir -p www && cp index.html www/"},"dependencies": {"@capacitor/core": "^6.0.0","@capacitor/android": "^6.0.0"},"devDependencies": {"@capacitor/cli": "^6.0.0"}}' > package.json
+        fi
+
+    - name: Instalar dependências e preparar
+      run: |
+        npm install
+        npm run build
+
+    - name: Inicializar o Capacitor para Android
+      run: |
+        npx cap init jarvis-app com.seunome.jarvis --web-dir=www
+        npx cap add android
+
+    - name: Copiar arquivos para a pasta Android
+      run: npx cap sync android
+
+    - name: Compilar o APK de verdade
+      run: |
+        cd android
+        chmod +x gradlew
+        ./gradlew assembleDebug
+
+    - name: Disponibilizar o APK para download
+      uses: actions/upload-artifact@v4
+      with:
+        name: Jarvis-Instalador
+        path: android/app/build/outputs/apk/debug/app-debug.apk
