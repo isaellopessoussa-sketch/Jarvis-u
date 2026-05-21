@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS</title>
+    <style>
+        body { background: #070b12; color: #00f3ff; font-family: 'Segoe UI', sans-serif; text-align: center; padding-top: 80px; margin: 0; }
+        .reactor { width: 120px; height: 120px; border: 4px solid #00f3ff; border-radius: 50%; margin: 0 auto; box-shadow: 0 0 15px #00f3ff, inset 0 0 15px #00f3ff; animation: pulse 2s infinite; }
+        h1 { font-weight: 300; letter-spacing: 3px; margin-top: 20px; }
+        #status { color: #8a99ad; font-size: 16px; margin: 20px; min-height: 20px; }
+        button { background: rgba(0, 243, 255, 0.1); border: 1px solid #00f3ff; color: #00f3ff; padding: 15px 40px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px rgba(0,243,255,0.2); transition: 0.3s; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 25px #00f3ff, inset 0 0 25px #00f3ff; } 100% { transform: scale(1); opacity: 0.8; } }
+    </style>
+</head>
+<body>
+
+    <div class="reactor"></div>
+    <h1>J.A.R.V.I.S.</h1>
+    <p id="status">SISTEMA ONLINE</p>
+    <button onclick="ouvir()">FALAR</button>
+
+    <script>
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (!SpeechRecognition) {
+            document.getElementById('status').innerText = "Erro: Seu celular não suporta comandos de voz no navegador.";
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR';
+
+            function ouvir() {
+                document.getElementById('status').innerText = "Ouvindo...";
+                recognition.start();
+            }
+
+            recognition.onresult = function(event) {
+                const comando = event.results[0][0].transcript.toLowerCase();
+                document.getElementById('status').innerText = "Você disse: " + comando;
+                processarComando(comando);
+            };
+        }
+
+        function processarComando(texto) {
+            let resposta = "Desculpe senhor, não encontrei essa informação nos meus arquivos.";
+            
+            if (texto.includes("olá") || texto.includes("acorda") || texto.includes("jarvis")) {
+                resposta = "Olá senhor. Sistemas operando com cem por cento de capacidade. Em que posso ajudar?";
+            } else if (texto.includes("quem é você")) {
+                resposta = "Eu sou o Jarvis. Um assistente virtual inteligente criado diretamente pelo GitHub.";
+            } else if (texto.includes("horas")) {
+                resposta = "Agora são exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            } else if (texto.includes("protocolo de festa")) {
+                resposta = "Entendido senhor. Iniciando o protocolo de festa e preparando as armaduras.";
+            }
+
+            falar(resposta);
+        }
+
+        function falar(textoParaFalar) {
+            const fala = new SpeechSynthesisUtterance(textoParaFalar);
+            fala.lang = 'pt-BR';
+            fala.rate = 1.1;
+            window.speechSynthesis.speak(fala);
+            document.getElementById('status').innerText = "JARVIS: " + textoParaFalar;
+        }
+    </script>
+</body>
+</html>
