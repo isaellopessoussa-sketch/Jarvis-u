@@ -1,54 +1,23 @@
-# 🤖 J.A.R.V.I.S. — HUD OS v4.0
+# J.A.R.V.I.S. - CORE ENGINE v8.0 🚀
+> **Stark Industries Quantum Mainframe Interface**
 
-<p align="center">
-  <img src="https://img.shields.io/badge/STATUS-OPERACIONAL-00f3ff?style=for-the-badge&logo=android&logoColor=white" alt="Status"/>
-  <img src="https://img.shields.io/badge/AMB-MOBILE_LANDSCAPE-blueviolet?style=for-the-badge" alt="Ambiente"/>
-  <img src="https://img.shields.io/badge/FABRICAÇÃO-GITHUB_ACTIONS-green?style=for-the-badge&logo=github" alt="Fábrica"/>
-</p>
+Repositório central de codificação do ecossistema J.A.R.V.I.S. (Just A Rather Very Intelligent System). Desenvolvido nativamente em HTML5/CSS3 Avançado e JavaScript Assíncrono para simular o HUD inteligente das armaduras Mark, totalmente responsivo para dispositivos móveis Android.
 
----
+## 🛠️ Novas Diretrizes Implementadas na v8.0
+* **Interface Híbrida Inteligente:** Adaptação dinâmica automática para Modo Retrato (Grade de comandos otimizada) e Modo Paisagem (Modo Cinema Expandido).
+* **Reator Arc Interativo:** Componente renderizado em pseudo-3D com animações quânticas de pulsação que serve como gatilho para colapsar/expandir a gaveta de diretrizes.
+* **Equalizador Quântico Realista:** Gráfico matricial expandido para 60 frequências aleatórias simulando varreduras de telemetria em tempo real.
+* **Módulos de Sistema Avançados:** * *Protocolo Hacker:* Criptografia visual e alteração do espectro cromático para verde Matrix.
+  * *Protocolo Stark:* Frequência estável em azul neon original.
 
-## 🌌 Interface de Comando Global
-Abaixo está o registro visual do painel tátil holográfico em modo paisagem, integrando a matriz de monitoramento global ao reator Arc central:
-
-<p align="center">
-  <img src="https://images.prodia.xyz/82672ea4-4861-46bd-8da9-ca821815bc8a.png" width="800" alt="Jarvis HUD Interface"/>
-</p>
-
----
-
-## ⚡ Recursos Ativados (Firmware v4.0)
-
-* **🌍 Globo Holográfico Global:** Mapa-múndi em estilo aramado (*wireframe*) neon com rotação simulada de satélites.
-* **🎬 Estética Marvel Studios:** Efeito de varredura de tela (*Scanlines*) e partículas de energia flutuantes baseadas nos laboratórios Stark.
-* **📱 Arquitetura Paisagem Profissional:** Travamento automático em modo horizontal para melhor leitura de dados e console expandido.
-* **🔊 Módulo de Voz Integrado:** Respostas automáticas por síntese de voz artificial (*Text-to-Speech*) modulada.
-* **⌨️ Banco de Diretrizes Tátil:** Menu rápido contendo comandos essenciais acionáveis por clique na tela.
+## 🎙️ Comandos de Voz Nativa & Diretrizes Integradas
+O núcleo do sistema reconhece as seguintes entradas textuais ou por voz:
+1. `Diagnóstico Base` / `Jarvis` -> Resposta de integridade dos sistemas.
+2. `Status do Sistema` / `Bateria` -> Faz a leitura assíncrona da API de Hardware do dispositivo Android informando a carga exata do Reator Central.
+3. `Abrir Câmera` -> Inicializa os sensores ópticos do aparelho através de intents nativas.
+4. `Pesquisar [termo]` -> Inicia uma varredura global abrindo uma nova janela de indexação da web.
+5. `Ligar Modo Hacker` -> Altera dinamicamente as classes da DOM aplicando o override visual criptográfico.
+6. `Desativar Modo Hacker` -> Restaura as definições originais das Indústrias Stark.
 
 ---
-
-## 📊 Matriz de Comandos Locais
-
-Envie os seguintes vetores de texto pelo console ou clique nas diretrizes para acionar as respostas:
-
-| Comando Aceito | Resposta do Sistema / Ação |
-| :--- | :--- |
-| `jarvis` / `olá` / `iniciar` | Inicialização completa e diagnóstico de capacidade energética. |
-| `horas` / `horário` / `tempo` | Consulta o relógio do Android e dita o horário local exato. |
-| `quem é você` / `identificação`| Apresentação das credenciais de IA do sistema. |
-| `protocolo de festa` | Comando estratégico com ativação e decolagem de trajes. |
-| `limpar` / `resetar` | Reinicialização completa do fluxo de texto do console. |
-
----
-
-## 🏗️ Motor de Desenvolvimento e Compilação
-
-* **Front-end:** HTML5, CSS3 Avançado (Keyframes, Glassmorphism) e JavaScript Puro.
-* **Empacotamento:** Framework **Capacitor.js** integrado com Android SDK.
-* **Fábrica Automatizada:** **GitHub Actions** (Workflow em Ubuntu) compilando o `.apk` em nuvem.
-
----
-
-<p align="center">
-  <sub>Propriedade Intelectual das Indústrias Stark. Acesso restrito a usuários autorizados.</sub>
-</p>
+*Sistemas operando em perfeita simetria algorítmica. Pronto para as diretrizes, Senhor.*
