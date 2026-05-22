@@ -13,10 +13,11 @@ jobs:
     - name: Coletar Código do Repositório
       uses: actions/checkout@v4
 
-    - name: Inicializar Ambiente Node.js
+    - name: Inicializar Ambiente Node.js com Cache Otimizado
       uses: actions/setup-node@v4
       with:
         node-version: 20
+        cache: 'npm'
 
     - name: Configurar Java JDK (Motor do Android)
       uses: actions/setup-java@v4
@@ -30,14 +31,15 @@ jobs:
     - name: Executar Build de Produção
       run: npm run build
 
-    - name: Sincronizar Plataforma Android
-      run: npx cap sync android
+    - name: Sincronizar Plataforma Android e Injetar Plugins
+      run: |
+        npx cap sync android
 
     - name: Forçar Orientação de Tela (Modo Deitado)
       run: |
         sed -i 's/android:name=".MainActivity"/android:name=".MainActivity" android:screenOrientation="landscape"/' android/app/src/main/AndroidManifest.xml
 
-    - name: Compilar Binário APK
+    - name: Compilar Binário APK Otimizado
       run: |
         cd android
         chmod +x gradlew
