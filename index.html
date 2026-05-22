@@ -13,7 +13,7 @@
             position: relative; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Scanline Cinema */
+        /* Scanlines de Cinema */
         body::before {
             content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.06) 50%);
@@ -24,7 +24,7 @@
             box-shadow: 0 0 15px #00f3ff; animation: scan 4s linear infinite; z-index: 21; pointer-events: none;
         }
 
-        /* MODO HACKER CRIPTOGRAFADO */
+        /* MODO HACKER */
         body.hacker-mode { background: #000500; color: #00ff00; }
         body.hacker-mode::before { background: linear-gradient(rgba(0, 10, 0, 0) 50%, rgba(0, 255, 0, 0.08) 50%); background-size: 100% 4px; }
         body.hacker-mode::after { background: rgba(0, 255, 0, 0.3); box-shadow: 0 0 15px #00ff00; }
@@ -36,11 +36,17 @@
         body.hacker-mode .cmd-btn { background: rgba(0, 255, 0, 0.05); border-color: rgba(0,255,0,0.3); color: #22c55e; }
         body.hacker-mode .bar { background: #00ff00; }
 
-        /* TELA DE BOOT (INICIALIZAÇÃO) */
+        /* TELA DE BOOT ATUALIZADA */
         #bootScreen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #010409; z-index: 100; display: flex; flex-direction: column;
-            padding: 40px; font-size: 14px; justify-content: flex-start; overflow: hidden;
+            padding: 30px; font-size: 13px; justify-content: flex-start; overflow: hidden;
+            color: #00f3ff;
+        }
+        .skip-btn {
+            position: absolute; bottom: 20px; right: 20px; background: transparent;
+            border: 1px solid #475569; color: #475569; padding: 5px 10px; font-family: inherit;
+            font-size: 11px; cursor: pointer; border-radius: 4px;
         }
 
         /* Painel Modular */
@@ -49,12 +55,11 @@
             border-radius: 6px; padding: 12px; display: flex; flex-direction: column;
             backdrop-filter: blur(5px); z-index: 10; overflow: hidden;
         }
-
         .panel-left { justify-content: space-between; align-items: center; }
         
-        /* Renderizador do Reator Arc Interativo 3D */
-        .viewport-3d { perspective: 600px; width: 100%; height: 130px; display: flex; justify-content: center; align-items: center; }
-        .reactor-3d { width: 100px; height: 100px; transform: rotateX(35deg) rotateY(-10deg); transform-style: preserve-3d; position: relative; }
+        /* Reator Arc 3D */
+        .viewport-3d { perspective: 600px; width: 100%; height: 120px; display: flex; justify-content: center; align-items: center; }
+        .reactor-3d { width: 90px; height: 90px; transform: rotateX(35deg) rotateY(-10deg); transform-style: preserve-3d; position: relative; }
         .ring { position: absolute; width: 100%; height: 100%; border: 4px dashed rgba(0, 243, 255, 0.5); border-radius: 50%; box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); animation: rotClockwise 8s linear infinite; }
         .ring-inner { position: absolute; top: 12%; left: 12%; width: 76%; height: 76%; border: 3px double #00f3ff; border-radius: 50%; animation: rotCounterClockwise 4s linear infinite; }
         .center-glow { position: absolute; top: 33%; left: 33%; width: 34%; height: 34%; background: #ffffff; border-radius: 50%; box-shadow: 0 0 30px #00f3ff, inset 0 0 10px #00f3ff; animation: pulseGlow 2s ease-in-out infinite; }
@@ -65,49 +70,50 @@
             background: rgba(0, 243, 255, 0.03); border: 1px solid rgba(0, 243, 255, 0.2);
             border-radius: 4px; color: #38bdf8; font-family: inherit; font-size: 10px; padding: 8px 4px;
             cursor: pointer; text-transform: uppercase; white-space: nowrap; overflow: hidden;
-            text-overflow: ellipsis; transition: all 0.2s;
+            text-overflow: ellipsis; transition: all 0.2s; text-align: center;
         }
-        .cmd-btn:hover { color: #fff; border-color: #00f3ff; transform: scale(1.02); }
+        .cmd-btn:hover { color: #fff; border-color: #00f3ff; }
 
         /* Painel Direito */
         .panel-right { justify-content: space-between; }
         .header-status { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(0, 243, 255, 0.2); padding-bottom: 6px; font-size: 11px; color: #64748b; }
         
-        /* Console de Logs em Cascata Estilo Chat */
+        /* Terminal */
         .console-box {
             flex-grow: 1; background: rgba(1, 6, 15, 0.8);
             border-left: 3px solid currentColor; padding: 10px;
             font-size: 12px; overflow-y: auto; margin: 8px 0;
-            display: flex; flex-direction: column; gap: 8px;
+            display: flex; flex-direction: column; gap: 6px;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
         }
-        .log-line { animation: fadeLine 0.3s ease-out forwards; }
+        .log-line { animation: fadeLine 0.2s ease-out forwards; }
         .sys-label { color: #475569; font-weight: bold; }
         .user-label { color: #e2e8f0; font-weight: bold; }
 
-        /* Gráfico de Barras */
-        .data-visualizer { display: flex; gap: 3px; height: 25px; align-items: flex-end; margin-bottom: 8px; }
+        /* Gráfico */
+        .data-visualizer { display: flex; gap: 3px; height: 20px; align-items: flex-end; margin-bottom: 4px; }
         .bar { flex-grow: 1; background: #00f3ff; height: 30%; animation: compute 1.2s ease-in-out infinite alternate; }
-        .bar:nth-child(2n) { animation-duration: 0.6s; }
-        .bar:nth-child(3n) { animation-duration: 0.9s; }
+        .bar:nth-child(2n) { animation-duration: 0.5s; }
+        .bar:nth-child(3n) { animation-duration: 0.8s; }
 
         .action-bar { display: flex; gap: 8px; }
         input[type="text"] { flex-grow: 1; background: rgba(1, 6, 15, 0.9); border: 1px solid rgba(0, 243, 255, 0.2); color: inherit; font-family: inherit; font-size: 13px; padding: 10px; border-radius: 4px; outline: none; }
-        .ctrl-btn { background: rgba(0, 243, 255, 0.05); border: 1px solid currentColor; color: inherit; font-family: inherit; font-weight: bold; padding: 0 16px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
+        .ctrl-btn { background: rgba(0, 243, 255, 0.05); border: 1px solid currentColor; color: inherit; font-family: inherit; font-weight: bold; padding: 0 14px; border-radius: 4px; cursor: pointer; }
 
         @keyframes scan { from { top: -10px; } to { top: 100%; } }
         @keyframes rotClockwise { from { transform: rotateZ(0deg); } to { transform: rotateZ(360deg); } }
         @keyframes rotCounterClockwise { from { transform: rotateZ(360deg); } to { transform: rotateZ(0deg); } }
         @keyframes pulseGlow { 0%, 100% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
         @keyframes compute { from { height: 10%; } to { height: 100%; } }
-        @keyframes fadeLine { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeLine { from { opacity: 0; transform: translateX(-3px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
 
     <div id="bootScreen">
-        <div style="color: #64748b; font-weight: bold; margin-bottom: 10px;">STARK INDUSTRIES SECURE BOOT v4.5</div>
-        <div id="bootLogs"></div>
+        <div style="color: #64748b; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px;">STARK INDUSTRIES SECURE BOOT v4.5</div>
+        <div id="bootLogs" style="line-height: 1.8;"></div>
+        <button class="skip-btn" onclick="pularBoot()">FORÇAR OVERRIDE ➢</button>
     </div>
 
     <div class="hud-panel panel-left">
@@ -126,7 +132,7 @@
 
         <div class="cmd-grid">
             <div class="cmd-btn" onclick="clicouComando('jarvis')">➢ Diagnóstico</div>
-            <div class="cmd-btn" onclick="clicouComando('status do sistema')">➢ Hardware Real</div>
+            <div class="cmd-btn" onclick="clicouComando('status do sistema')">➢ Bateria Real</div>
             <div class="cmd-btn" onclick="clicouComando('abrir câmera')">➢ Câmera</div>
             <div class="cmd-btn" onclick="clicouComando('pesquisar armadura do homem de ferro')">➢ Pesquisar</div>
             <div class="cmd-btn" onclick="clicouComando('ligar modo hacker')">➢ M. Hacker</div>
@@ -158,29 +164,42 @@
         </div>
     </div>
 
-    <script src="capacitor.js"></script>
-
     <script>
-        // Animação de Inicialização Exclusiva (Boot Logs)
+        // Sistema de Logs Sem Travamento
         const logs = [
             "Conectando ao núcleo central do Android...",
-            "Injetando overrides de privilégio de Criador...",
-            "Alinhando Reator Arc quântico... [OK]",
-            "Sincronizando bancos de dados locais...",
-            "Carregando sensores de telemetria de hardware...",
-            "ACESSO CONCEDIDO: Olá, Senhor Desenvolvedor!"
+            "Injetando privilégios nível Stark... [OK]",
+            "Alinhando Reator Arc quântico... [ESTÁVEL]",
+            "Carregando barramento de telemetria...",
+            "Sincronizando relógio atômico local...",
+            "ACESSO CONCEDIDO: Bem-vindo, Senhor!"
         ];
         let logIndex = 0;
+        
         function rodarBoot() {
-            if(logIndex < logs.length) {
-                document.getElementById('bootLogs').innerHTML += `<div>> ${logs[logIndex]}</div>`;
-                logIndex++;
-                setTimeout(rodarBoot, 400);
-            } else {
-                setTimeout(() => { document.getElementById('bootScreen').style.display = 'none'; }, 600);
+            try {
+                if(logIndex < logs.length) {
+                    const container = document.getElementById('bootLogs');
+                    if(container) {
+                        container.innerHTML += `<div style="color: #38bdf8">> ${logs[logIndex]}</div>`;
+                        logIndex++;
+                    }
+                    setTimeout(rodarBoot, 350);
+                } else {
+                    pularBoot();
+                }
+            } catch(e) {
+                pularBoot(); // Se qualquer coisa falhar, abre o app direto!
             }
         }
-        window.onload = rodarBoot;
+
+        function pularBoot() {
+            const screen = document.getElementById('bootScreen');
+            if(screen) screen.style.display = 'none';
+        }
+
+        // Inicia o boot de forma segura
+        document.addEventListener("DOMContentLoaded", rodarBoot);
 
         // Relógio
         setInterval(() => { document.getElementById('timeDisplay').innerText = new Date().toLocaleTimeString('pt-BR'); }, 1000);
@@ -193,60 +212,38 @@
             const cmd = caixa.value.trim();
             if(!cmd) return;
             caixa.value = "";
-            printConsole("[VOCÊ]", cmd.toUpperCase(), "user-label");
+            printConsole("VOCÊ", cmd.toUpperCase(), "user-label");
             acionarComando(cmd);
         }
 
         function printConsole(autor, texto, classeLabel) {
             const box = document.getElementById('consoleBox');
             box.innerHTML += `<div class="log-line"><span class="${classeLabel}">[${autor}]:</span> ${texto}</div>`;
-            box.scrollTop = box.scrollHeight; // Rola o chat automático para baixo!
+            box.scrollTop = box.scrollHeight;
         }
 
         async function acionarComando(comandoBruto) {
             const t = comandoBruto.toLowerCase().trim();
-            let r = "Diretriz não indexada nos meus bancos locais, senhor.";
+            let r = "Diretriz local não indexada nos meus bancos de dados, senhor.";
 
-            // 🔋 Comando de Bateria Blindado e Atualizado
+            // 🔋 Hardware Inteligente Nativo sem dependência externa
             if (t.includes("status do sistema") || t.includes("bateria") || t.includes("hardware")) {
                 let nivel = 100;
                 let carregando = "operando em modo dissipativo";
                 
                 try {
-                    // Tentativa 1: Via API nativa do Navegador/Android (Mais estável para WebViews)
                     if (navigator.getBattery) {
                         const battery = await navigator.getBattery();
                         nivel = Math.round(battery.level * 100);
-                        carregando = battery.charging ? "alimentado pela tomada" : "operando em modo dissipativo";
-                    } 
-                    // Tentativa 2: Via Capacitor Device Plugin se a primeira falhar
-                    else if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Device) {
-                        const info = await window.Capacitor.Plugins.Device.getBatteryInfo();
-                        nivel = Math.round(info.batteryLevel * 100);
-                        carregando = info.isCharging ? "alimentado pela tomada" : "operando em modo dissipativo";
+                        carregando = battery.charging ? "alimentado pela fonte externa" : "operando em modo dissipativo";
+                        r = `Níveis de energia do dispositivo em ${nivel} por cento. O núcleo central está ${carregando}, senhor.`;
                     } else {
-                        throw new Error("Sensores indisponíveis");
+                        r = "Sensores de telemetria física inacessíveis. Barramento térmico operando acima de setenta por cento.";
                     }
-                    
-                    r = `Status atual da armadura: Níveis de energia do celular em ${nivel} por cento, e o núcleo está ${carregando}, senhor.`;
                 } catch(e) {
-                    // Sistema de Emergência (Caso o Android bloqueie tudo, o app não trava mais!)
-                    r = "Sensores físicos em sobrecarga, mas a telemetria estimada indica núcleo estável acima de setenta por cento.";
+                    r = "Matriz quântica estável, mas o barramento de energia reportou uma variação de leitura.";
                 }
                 
-                printConsole("JARVIS", r.toUpperCase(), "sys-label");
-                falar(r);
-                return;
-            }
-                
-                    // Puxa o plugin nativo do Capacitor
-                    const info = await capacitor.Plugins.Device.getBatteryInfo();
-                    const nivel = Math.round(info.batteryLevel * 100);
-                    const carregando = info.isCharging ? "alimentado pela tomada" : "operando em modo dissipativo";
-                    r = `Status atual da armadura: Níveis de energia do celular em ${nivel} por cento, e o núcleo está ${carregando}, senhor.`;
-                } catch(e) {
-                    r = "Não consegui ler os sensores físicos de energia, mas a matriz quântica está estável.";
-                }
                 printConsole("JARVIS", r.toUpperCase(), "sys-label");
                 falar(r);
                 return;
@@ -255,7 +252,7 @@
             if (t.includes("câmera") || t.includes("camera")) {
                 r = "Inicializando hardware óptico nativo do Android.";
                 printConsole("JARVIS", r.toUpperCase(), "sys-label"); falar(r);
-                setTimeout(() => { window.location.href = "intent://#Intent;action=android.media.action.IMAGE_CAPTURE;end"; }, 1200);
+                setTimeout(() => { window.location.href = "intent://#Intent;action=android.media.action.IMAGE_CAPTURE;end"; }, 1000);
                 return;
             }
 
@@ -263,7 +260,7 @@
                 const termo = t.replace("pesquisar ", "");
                 r = "Rastreando registros web para: " + termo;
                 printConsole("JARVIS", r.toUpperCase(), "sys-label"); falar(r);
-                setTimeout(() => { window.open("https://www.google.com/search?q=" + encodeURIComponent(termo), '_blank'); }, 1200);
+                setTimeout(() => { window.open("https://www.google.com/search?q=" + encodeURIComponent(termo), '_blank'); }, 1000);
                 return;
             }
 
@@ -276,12 +273,9 @@
                 document.body.classList.remove('hacker-mode');
                 document.getElementById('hudTitle').innerText = "J.A.R.V.I.S.";
             } else if (t.includes("olá") || t.includes("jarvis") || t.includes("iniciar")) {
-                r = "Todos os sistemas operando com total eficiência energética. Que bom ver o senhor.";
+                r = "Todos os sistemas operando com total eficiência energética. À sua disposição.";
             } else if (t.includes("horas") || t.includes("tempo")) {
-                r = "São exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) + " no fuso local.";
-            } else if (t.includes("limpar") || t.includes("resetar")) {
-                document.getElementById('consoleBox').innerHTML = '<div class="log-line"><span class="sys-label">[SISTEMA]:</span> CONSOLE REINICIADO.</div>';
-                return;
+                r = "São exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) + ".";
             }
 
             printConsole("JARVIS", r.toUpperCase(), "sys-label");
@@ -306,7 +300,7 @@
             rec.start();
             rec.onresult = (e) => { 
                 const voz = e.results[0][0].transcript;
-                printConsole("[VOCÊ]", voz.toUpperCase(), "user-label");
+                printConsole("VOCÊ", voz.toUpperCase(), "user-label");
                 acionarComando(voz); 
                 document.getElementById('micBtn').innerText = "🎙️"; 
             };
