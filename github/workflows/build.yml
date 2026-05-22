@@ -1,52 +1,49 @@
-name: Compilador Supremo JARVIS OS
+name: Construir APK do Jarvis
 
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch:
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Coletar Código do Repositório
-      uses: actions/checkout@v4
+      - name: Pegar código do repositório
+        uses: actions/checkout@v3
 
-    - name: Inicializar Ambiente Node.js com Cache Otimizado
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-size: '16'
+          cache: 'npm'
 
-    - name: Configurar Java JDK (Motor do Android)
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'zulu'
-        java-version: '17'
+      - name: Instalar o Java (JDK 17)
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
-    - name: Instalar Dependências do Capacitor
-      run: npm install
+      - name: Preparar Diretórios e Instalar Dependências
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
+          npm install
 
-    - name: Executar Build de Produção
-      run: npm run build
+      - name: Sincronizar Projeto Android (Capacitor)
+        run: |
+          npx cap android add || true
+          npx cap sync
 
-    - name: Sincronizar Plataforma Android e Injetar Plugins
-      run: |
-        npx cap sync android
+      - name: Compilar o APK de Verdade
+        run: |
+          cd android
+          ./gradlew assembleDebug
 
-    - name: Forçar Orientação de Tela (Modo Deitado)
-      run: |
-        sed -i 's/android:name=".MainActivity"/android:name=".MainActivity" android:screenOrientation="landscape"/' android/app/src/main/AndroidManifest.xml
-
-    - name: Compilar Binário APK Otimizado
-      run: |
-        cd android
-        chmod +x gradlew
-        ./gradlew assembleDebug
-
-    - name: Disponibilizar APK para Download
-      uses: actions/upload-artifact@v4
-      with:
-        name: JarvisOS-Quantum
-        path: android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Disponibilizar o APK para download
+        uses: actions/upload-artifact@v3
+        with:
+          name: jarvis-core-v8-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
