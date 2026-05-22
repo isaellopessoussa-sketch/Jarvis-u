@@ -1,6 +1,5 @@
 {
-  "appId": "com.seunome.jarvis",
-  "appName": "jarvis-app",
-  "webDir": "www",
-  "bundledWebRuntime": false
+  "appId": "com.starkindustries.jarvis",
+  "appName": "JARVIS CORE",
+  "webDir": "www"
 }
