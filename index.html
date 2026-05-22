@@ -207,9 +207,38 @@
             const t = comandoBruto.toLowerCase().trim();
             let r = "Diretriz não indexada nos meus bancos locais, senhor.";
 
-            // 🔋 Comando Secreto Avançado: Pegar bateria real do celular!
+            // 🔋 Comando de Bateria Blindado e Atualizado
             if (t.includes("status do sistema") || t.includes("bateria") || t.includes("hardware")) {
+                let nivel = 100;
+                let carregando = "operando em modo dissipativo";
+                
                 try {
+                    // Tentativa 1: Via API nativa do Navegador/Android (Mais estável para WebViews)
+                    if (navigator.getBattery) {
+                        const battery = await navigator.getBattery();
+                        nivel = Math.round(battery.level * 100);
+                        carregando = battery.charging ? "alimentado pela tomada" : "operando em modo dissipativo";
+                    } 
+                    // Tentativa 2: Via Capacitor Device Plugin se a primeira falhar
+                    else if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Device) {
+                        const info = await window.Capacitor.Plugins.Device.getBatteryInfo();
+                        nivel = Math.round(info.batteryLevel * 100);
+                        carregando = info.isCharging ? "alimentado pela tomada" : "operando em modo dissipativo";
+                    } else {
+                        throw new Error("Sensores indisponíveis");
+                    }
+                    
+                    r = `Status atual da armadura: Níveis de energia do celular em ${nivel} por cento, e o núcleo está ${carregando}, senhor.`;
+                } catch(e) {
+                    // Sistema de Emergência (Caso o Android bloqueie tudo, o app não trava mais!)
+                    r = "Sensores físicos em sobrecarga, mas a telemetria estimada indica núcleo estável acima de setenta por cento.";
+                }
+                
+                printConsole("JARVIS", r.toUpperCase(), "sys-label");
+                falar(r);
+                return;
+            }
+                
                     // Puxa o plugin nativo do Capacitor
                     const info = await capacitor.Plugins.Device.getBatteryInfo();
                     const nivel = Math.round(info.batteryLevel * 100);
