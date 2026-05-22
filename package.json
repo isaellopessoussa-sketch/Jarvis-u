@@ -4,18 +4,14 @@
   "description": "J.A.R.V.I.S. Mainframe Core - Stark Industries OS Overhaul v8",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "build": "echo \"Building web assets for Jarvis OS v8...\" "
+    "build": "mkdir -p www && cp index.html www/index.html",
+    "cap-sync": "npx cap sync"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/isaellopessoussa-sketch/Jarvis-u.git"
   },
-  "keywords": [
-    "jarvis",
-    "stark-hud"
-  ],
-  "author": "Stark Industries Integration",
+  "author": "Stark Industries",
   "license": "MIT",
   "dependencies": {
     "@capacitor/android": "^5.0.0",
