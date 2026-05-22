@@ -9,9 +9,19 @@
         
         body { 
             background: #01070e; color: #00f3ff; font-family: 'Courier New', Courier, monospace; 
-            margin: 0; padding: 12px; overflow: hidden; display: grid;
-            grid-template-columns: 1fr 2.5fr; gap: 12px; height: 100vh; width: 100vw;
+            margin: 0; padding: 12px; overflow: hidden; display: flex;
+            flex-direction: row; gap: 12px; height: 100vh; width: 100vw;
             position: relative; transition: all 0.4s ease;
+        }
+
+        /* AJUSTE DINÂMICO SE O CELULAR ESTIVER EM PÉ (PORTRAIT) */
+        @media (max-width: 768px) or (orientation: portrait) {
+            body { flex-direction: column; overflow-y: auto; }
+            .panel-left { width: 100% !important; height: auto !important; }
+            .panel-right { width: 100% !important; height: 450px !important; }
+            .viewport-3d { height: 75px !important; }
+            .reactor-3d { width: 60px !important; height: 60px !important; }
+            .cmd-column { display: grid !important; grid-template-columns: 1fr 1fr; gap: 6px; }
         }
 
         /* Scanlines de Tela Stark */
@@ -36,15 +46,15 @@
         body.hacker-mode .cmd-btn:hover { border-color: #00ff00; color: #fff; background: rgba(0, 255, 0, 0.05); }
         body.hacker-mode .bar { background: #00ff00; }
 
-        /* Painel Estrutural Base */
+        /* Painéis Estruturais */
         .hud-panel {
             background: rgba(2, 9, 22, 0.6); border: 1px solid rgba(0, 243, 255, 0.15);
             border-radius: 6px; padding: 12px; display: flex; flex-direction: column;
             backdrop-filter: blur(4px); z-index: 10; overflow: hidden;
         }
 
-        /* PAINEL LATERAL ESQUERDO */
-        .panel-left { justify-content: space-between; align-items: center; gap: 10px; }
+        .panel-left { width: 30%; justify-content: space-between; align-items: center; gap: 10px; }
+        .panel-right { width: 70%; justify-content: space-between; }
         
         .viewport-3d { perspective: 400px; width: 100%; height: 95px; display: flex; justify-content: center; align-items: center; }
         .reactor-3d { width: 75px; height: 75px; transform: rotateX(30deg) rotateY(-5deg); transform-style: preserve-3d; position: relative; }
@@ -52,24 +62,20 @@
         .ring-inner { position: absolute; top: 12%; left: 12%; width: 76%; height: 76%; border: 2px double #00f3ff; border-radius: 50%; animation: rotCounterClockwise 5s linear infinite; }
         .center-glow { position: absolute; top: 33%; left: 33%; width: 34%; height: 34%; background: #ffffff; border-radius: 50%; box-shadow: 0 0 25px #00f3ff; animation: pulseGlow 2s ease-in-out infinite; }
 
-        /* Lista de Comandos Expandida (Sem Texto Cortado) */
         .cmd-column { display: flex; flex-direction: column; gap: 6px; width: 100%; }
         .cmd-btn {
             background: rgba(0, 243, 255, 0.02); border: 1px solid rgba(0, 243, 255, 0.15);
             border-radius: 4px; color: #38bdf8; font-family: inherit; font-size: 11px; font-weight: bold;
             padding: 10px 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
-            transition: all 0.2s ease; text-align: left; width: 100%; display: block;
+            transition: all 0.2s ease; text-align: center; width: 100%; display: block;
         }
-        .cmd-btn:hover { color: #ffffff; border-color: #00f3ff; background: rgba(0, 243, 255, 0.05); transform: translateX(3px); }
-
-        /* PAINEL CENTRAL DIREITO (MAINFRAME COGNITIVO) */
-        .panel-right { justify-content: space-between; }
+        .cmd-btn:hover { color: #ffffff; border-color: #00f3ff; background: rgba(0, 243, 255, 0.05); }
         
         .header-status { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(0, 243, 255, 0.15); padding-bottom: 8px; font-size: 10px; color: #475569; letter-spacing: 1px; }
         .tech-data { display: flex; gap: 15px; }
         .data-node { color: currentColor; font-weight: bold; }
 
-        /* Centro Útil: O Terminal de Cascata Amplo */
+        /* Espaço Principal de Logs */
         .console-box {
             flex-grow: 1; background: rgba(1, 4, 10, 0.85);
             border-left: 3px solid currentColor; padding: 12px;
@@ -81,11 +87,10 @@
         .sys-label { color: #64748b; font-weight: bold; }
         .user-label { color: #94a3b8; font-weight: bold; }
 
-        /* Equalizador Dinâmico Inteligente */
+        /* Gráfico Dinâmico */
         .data-visualizer { display: flex; gap: 2px; height: 16px; align-items: flex-end; margin-bottom: 6px; opacity: 0.7; }
         .bar { flex-grow: 1; background: #00f3ff; height: 20%; transition: height 0.1s ease; }
         
-        /* Modificações de Controle Inferior */
         .action-bar { display: flex; gap: 8px; width: 100%; }
         input[type="text"] { 
             flex-grow: 1; background: rgba(1, 4, 10, 0.9); border: 1px solid rgba(0, 243, 255, 0.15); 
@@ -94,12 +99,11 @@
         input[type="text"]:focus { border-color: #00f3ff; }
         
         .ctrl-btn { background: rgba(0, 243, 255, 0.03); border: 1px solid currentColor; color: inherit; font-family: inherit; font-weight: bold; padding: 0 16px; border-radius: 4px; cursor: pointer; text-transform: uppercase; font-size: 12px; }
-        .ctrl-btn:active { background: rgba(0, 243, 255, 0.15); }
 
         @keyframes scan { from { top: -10px; } to { top: 100%; } }
         @keyframes rotClockwise { from { transform: rotateZ(0deg); } to { transform: rotateZ(360deg); } }
         @keyframes rotCounterClockwise { from { transform: rotateZ(360deg); } to { transform: rotateZ(0deg); } }
-        @keyframes pulseGlow { 0%, 100__% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.05); opacity: 1; } }
         @keyframes fadeLine { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -120,4 +124,150 @@
         </div>
 
         <div class="cmd-column">
-            <button class="cmd-btn" onclick="clicouCom
+            <button class="cmd-btn" onclick="clicouComando('jarvis')">➢ Diagnóstico Base</button>
+            <button class="cmd-btn" onclick="clicouComando('status do sistema')">➢ Hardware</button>
+            <button class="cmd-btn" onclick="clicouComando('abrir câmera')">➢ Câmera</button>
+            <button class="cmd-btn" onclick="clicouComando('pesquisar armadura do homem de ferro')">➢ Pesquisa</button>
+            <button class="cmd-btn" onclick="clicouComando('ligar modo hacker')">➢ P. Hacker</button>
+            <button class="cmd-btn" onclick="clicouComando('desativar modo hacker')">➢ P. Stark</button>
+        </div>
+    </div>
+
+    <div class="hud-panel panel-right">
+        <div class="header-status">
+            <div class="tech-data">
+                <span>NÚCLEO: <span class="data-node" style="color: #22c55e;">ONLINE</span></span>
+                <span>MATRIZ: <span class="data-node" id="batNode">100%</span></span>
+            </div>
+            <span id="timeDisplay">00:00:00</span>
+        </div>
+
+        <div class="console-box" id="consoleBox">
+            <div class="log-line"><span class="sys-label">[SISTEMA]:</span> Diretrizes quânticas sincronizadas. Bem-vindo de volta, senhor.</div>
+        </div>
+
+        <div class="data-visualizer" id="visualizer"></div>
+
+        <div class="action-bar">
+            <button class="ctrl-btn" onclick="escutarVoz()" id="micBtn">🎙️</button>
+            <input type="text" id="inputCmd" placeholder="Insira uma diretriz..." onkeypress="verificarEnter(event)">
+            <button class="ctrl-btn" onclick="processarEnvio()">Exec</button>
+        </div>
+    </div>
+
+    <script>
+        const viz = document.getElementById('visualizer');
+        const totalBarras = 30;
+        for(let i=0; i<totalBarras; i++) { viz.innerHTML += `<div class="bar" id="b-${i}"></div>`; }
+
+        setInterval(() => {
+            for(let i=0; i<totalBarras; i++) {
+                const bar = document.getElementById(`b-${i}`);
+                if(bar) bar.style.height = (Math.floor(Math.random() * 45) + 10) + "%";
+            }
+        }, 150);
+
+        function dispararPulsoProcessamento() {
+            let ciclos = 0;
+            const intervalo = setInterval(() => {
+                for(let i=0; i<totalBarras; i++) {
+                    const bar = document.getElementById(`b-${i}`);
+                    if(bar) bar.style.height = (Math.floor(Math.random() * 80) + 20) + "%";
+                }
+                if(++ciclos > 6) clearInterval(intervalo);
+            }, 60);
+        }
+
+        setInterval(() => { document.getElementById('timeDisplay').innerText = new Date().toLocaleTimeString('pt-BR'); }, 1000);
+
+        function verificarEnter(e) { if (e.key === 'Enter') processarEnvio(); }
+        function clicouComando(txt) { acionarComando(txt); }
+
+        function processarEnvio() {
+            const caixa = document.getElementById('inputCmd');
+            const cmd = caixa.value.trim();
+            if(!cmd) return;
+            caixa.value = "";
+            dispararPulsoProcessamento();
+            printConsole("VOCÊ", cmd.toUpperCase(), "user-label");
+            acionarComando(cmd);
+        }
+
+        function printConsole(autor, texto, classeLabel) {
+            const box = document.getElementById('consoleBox');
+            box.innerHTML += `<div class="log-line"><span class="${classeLabel}">[${autor}]:</span> ${texto}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        async function acionarComando(comandoBruto) {
+            const t = comandoBruto.toLowerCase().trim();
+            let r = "Diretriz local não localizada nos indexadores quânticos, senhor.";
+
+            if (t.includes("status do sistema") || t.includes("bateria") || t.includes("hardware")) {
+                let nivel = 100;
+                let carregando = "operando em modo dissipativo";
+                try {
+                    if (navigator.getBattery) {
+                        const battery = await navigator.getBattery();
+                        nivel = Math.round(battery.level * 100);
+                        carregando = battery.charging ? "conectado à rede externa" : "operando em modo dissipativo";
+                        document.getElementById('batNode').innerText = nivel + "%";
+                        r = `Energia em ${nivel} por cento. O reator central está ${carregando}, senhor.`;
+                    }
+                } catch(e) { r = "Estimativa lógica aponta estabilidade energética do mainframe."; }
+                printConsole("JARVIS", r.toUpperCase(), "sys-label"); falar(r); return;
+            }
+
+            if (t.includes("câmera") || t.includes("camera")) {
+                r = "Inicializando hardware óptico nativo do dispositivo Android.";
+                printConsole("JARVIS", r.toUpperCase(), "sys-label"); falar(r);
+                setTimeout(() => { window.location.href = "intent://#Intent;action=android.media.action.IMAGE_CAPTURE;end"; }, 1000); return;
+            }
+
+            if (t.startsWith("pesquisar ")) {
+                const termo = t.replace("pesquisar ", "");
+                r = "Varrendo registros da rede global para: " + termo;
+                printConsole("JARVIS", r.toUpperCase(), "sys-label"); falar(r);
+                setTimeout(() => { window.open("https://www.google.com/search?q=" + encodeURIComponent(termo), '_blank'); }, 1000); return;
+            }
+
+            if (t.includes("hacker")) {
+                r = "Protocolo de invasão ativo. Modificando assinaturas para espectro verde.";
+                document.body.classList.add('hacker-mode');
+                document.getElementById('hudTitle').innerText = "MAINFRAME";
+            } else if (t.includes("stark") || t.includes("normal") || t.includes("desativar")) {
+                r = "Restaurando frequência azul neon padrão das Indústrias Stark.";
+                document.body.classList.remove('hacker-mode');
+                document.getElementById('hudTitle').innerText = "J.A.R.V.I.S.";
+            } else if (t.includes("olá") || t.includes("jarvis")) {
+                r = "Sistemas operando em perfeita simetria algorítmica. À sua disposição.";
+            } else if (t.includes("horas") || t.includes("tempo")) {
+                r = "Cronômetro interno indica exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) + ".";
+            }
+            printConsole("JARVIS", r.toUpperCase(), "sys-label"); falar(r);
+        }
+
+        function falar(textoParaFalar) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const fala = new SpeechSynthesisUtterance(textoParaFalar);
+                fala.lang = 'pt-BR'; fala.rate = 1.15;
+                window.speechSynthesis.speak(fala);
+            }
+        }
+
+        function escutarVoz() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+            const rec = new SpeechRecognition(); rec.lang = 'pt-BR';
+            document.getElementById('micBtn').innerText = "🛑"; rec.start();
+            rec.onresult = (e) => { 
+                const voz = e.results[0][0].transcript;
+                printConsole("VOCÊ", voz.toUpperCase(), "user-label"); acionarComando(voz); 
+                document.getElementById('micBtn').innerText = "🎙️"; 
+            };
+            rec.onerror = () => { document.getElementById('micBtn').innerText = "🎙️"; };
+        }
+    </script>
+</body>
+</html>
