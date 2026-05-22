@@ -5,23 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>JARVIS QUANTUM HUD</title>
     <style>
-        /* Reset de Tela de Cinema */
         * { box-sizing: border-box; -webkit-user-select: none; user-select: none; }
         body { 
-            background: #010a15; 
-            color: #00f3ff; 
-            font-family: 'Courier New', Courier, monospace; 
-            margin: 0; padding: 15px;
-            overflow: hidden; 
-            display: grid;
-            grid-template-columns: 1.2fr 2fr;
-            gap: 15px;
-            height: 100vh; width: 100vw;
-            position: relative;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #010a15; color: #00f3ff; font-family: 'Courier New', Courier, monospace; 
+            margin: 0; padding: 15px; overflow: hidden; display: grid;
+            grid-template-columns: 1.2fr 2fr; gap: 15px; height: 100vh; width: 100vw;
+            position: relative; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Efeito de Vidro de Monitor e Scanline */
+        /* Scanline Cinema */
         body::before {
             content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 243, 255, 0.06) 50%);
@@ -41,122 +33,82 @@
         body.hacker-mode .center-glow { background: #00ff00; box-shadow: 0 0 30px #00ff00; }
         body.hacker-mode .hud-panel { border-color: rgba(0, 255, 0, 0.2); background: rgba(0, 5, 0, 0.6); }
         body.hacker-mode button { border-color: #00ff00; color: #00ff00; }
-        body.hacker-mode button:active { background: rgba(0, 255, 0, 0.2); }
         body.hacker-mode .cmd-btn { background: rgba(0, 255, 0, 0.05); border-color: rgba(0,255,0,0.3); color: #22c55e; }
         body.hacker-mode .bar { background: #00ff00; }
 
-        /* Painel Modular (Layout Base) */
-        .hud-panel {
-            background: rgba(2, 12, 27, 0.5);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            border-radius: 6px;
-            padding: 12px;
-            display: flex; flex-direction: column;
-            backdrop-filter: blur(5px);
-            z-index: 10;
-            overflow: hidden;
+        /* TELA DE BOOT (INICIALIZAÇÃO) */
+        #bootScreen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #010409; z-index: 100; display: flex; flex-direction: column;
+            padding: 40px; font-size: 14px; justify-content: flex-start; overflow: hidden;
         }
 
-        /* PAINEL ESQUERDO: CORE INTERATIVO */
+        /* Painel Modular */
+        .hud-panel {
+            background: rgba(2, 12, 27, 0.5); border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 6px; padding: 12px; display: flex; flex-direction: column;
+            backdrop-filter: blur(5px); z-index: 10; overflow: hidden;
+        }
+
         .panel-left { justify-content: space-between; align-items: center; }
         
         /* Renderizador do Reator Arc Interativo 3D */
-        .viewport-3d {
-            perspective: 600px;
-            width: 100%; height: 140px;
-            display: flex; justify-content: center; align-items: center;
-            margin-top: 5px;
-        }
-        .reactor-3d {
-            width: 110px; height: 110px;
-            transform: rotateX(35deg) rotateY(-10deg);
-            transform-style: preserve-3d;
-            position: relative;
-        }
-        .ring {
-            position: absolute; width: 100%; height: 100%;
-            border: 4px dashed rgba(0, 243, 255, 0.5); border-radius: 50%;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-            animation: rotClockwise 8s linear infinite;
-        }
-        .ring-inner {
-            position: absolute; top: 12%; left: 12%; width: 76%; height: 76%;
-            border: 3px double #00f3ff; border-radius: 50%;
-            animation: rotCounterClockwise 4s linear infinite;
-        }
-        .center-glow {
-            position: absolute; top: 33%; left: 33%; width: 34%; height: 34%;
-            background: #ffffff; border-radius: 50%;
-            box-shadow: 0 0 30px #00f3ff, inset 0 0 10px #00f3ff;
-            animation: pulseGlow 2s ease-in-out infinite;
-        }
+        .viewport-3d { perspective: 600px; width: 100%; height: 130px; display: flex; justify-content: center; align-items: center; }
+        .reactor-3d { width: 100px; height: 100px; transform: rotateX(35deg) rotateY(-10deg); transform-style: preserve-3d; position: relative; }
+        .ring { position: absolute; width: 100%; height: 100%; border: 4px dashed rgba(0, 243, 255, 0.5); border-radius: 50%; box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); animation: rotClockwise 8s linear infinite; }
+        .ring-inner { position: absolute; top: 12%; left: 12%; width: 76%; height: 76%; border: 3px double #00f3ff; border-radius: 50%; animation: rotCounterClockwise 4s linear infinite; }
+        .center-glow { position: absolute; top: 33%; left: 33%; width: 34%; height: 34%; background: #ffffff; border-radius: 50%; box-shadow: 0 0 30px #00f3ff, inset 0 0 10px #00f3ff; animation: pulseGlow 2s ease-in-out infinite; }
 
-        /* Listagem de Comandos Otimizada */
-        .cmd-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-            width: 100%; margin-top: 10px;
-        }
+        /* Grade de Comandos */
+        .cmd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; }
         .cmd-btn {
-            background: rgba(0, 243, 255, 0.03);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            border-radius: 4px; color: #38bdf8;
-            font-family: inherit; font-size: 10px; padding: 8px 4px;
-            cursor: pointer; text-align: left;
-            text-transform: uppercase; white-space: nowrap; overflow: hidden;
+            background: rgba(0, 243, 255, 0.03); border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 4px; color: #38bdf8; font-family: inherit; font-size: 10px; padding: 8px 4px;
+            cursor: pointer; text-transform: uppercase; white-space: nowrap; overflow: hidden;
             text-overflow: ellipsis; transition: all 0.2s;
         }
         .cmd-btn:hover { color: #fff; border-color: #00f3ff; transform: scale(1.02); }
 
-        /* PAINEL DIREITO: MAINFRAME */
+        /* Painel Direito */
         .panel-right { justify-content: space-between; }
+        .header-status { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(0, 243, 255, 0.2); padding-bottom: 6px; font-size: 11px; color: #64748b; }
         
-        .header-status {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
-            padding-bottom: 6px; margin-bottom: 8px; font-size: 11px; color: #64748b;
-        }
-        
-        /* Área Principal do Console */
+        /* Console de Logs em Cascata Estilo Chat */
         .console-box {
             flex-grow: 1; background: rgba(1, 6, 15, 0.8);
             border-left: 3px solid currentColor; padding: 10px;
-            font-size: 12px; overflow-y: auto; margin-bottom: 10px;
+            font-size: 12px; overflow-y: auto; margin: 8px 0;
+            display: flex; flex-direction: column; gap: 8px;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
         }
+        .log-line { animation: fadeLine 0.3s ease-out forwards; }
         .sys-label { color: #475569; font-weight: bold; }
+        .user-label { color: #e2e8f0; font-weight: bold; }
 
-        /* Equalizador/Gráfico de Frequência Artificial */
+        /* Gráfico de Barras */
         .data-visualizer { display: flex; gap: 3px; height: 25px; align-items: flex-end; margin-bottom: 8px; }
         .bar { flex-grow: 1; background: #00f3ff; height: 30%; animation: compute 1.2s ease-in-out infinite alternate; }
-        /* Variações de tempo nas barras */
         .bar:nth-child(2n) { animation-duration: 0.6s; }
         .bar:nth-child(3n) { animation-duration: 0.9s; }
 
-        /* Inputs Integrados */
         .action-bar { display: flex; gap: 8px; }
-        input[type="text"] {
-            flex-grow: 1; background: rgba(1, 6, 15, 0.9);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            color: inherit; font-family: inherit; font-size: 13px;
-            padding: 10px; border-radius: 4px; outline: none;
-        }
-        input[type="text"]:focus { border-color: #00f3ff; }
-        
-        .ctrl-btn {
-            background: rgba(0, 243, 255, 0.05); border: 1px solid currentColor;
-            color: inherit; font-family: inherit; font-weight: bold;
-            padding: 0 16px; border-radius: 4px; cursor: pointer; text-transform: uppercase;
-        }
+        input[type="text"] { flex-grow: 1; background: rgba(1, 6, 15, 0.9); border: 1px solid rgba(0, 243, 255, 0.2); color: inherit; font-family: inherit; font-size: 13px; padding: 10px; border-radius: 4px; outline: none; }
+        .ctrl-btn { background: rgba(0, 243, 255, 0.05); border: 1px solid currentColor; color: inherit; font-family: inherit; font-weight: bold; padding: 0 16px; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
 
-        /* Definições das Animações Core */
         @keyframes scan { from { top: -10px; } to { top: 100%; } }
         @keyframes rotClockwise { from { transform: rotateZ(0deg); } to { transform: rotateZ(360deg); } }
         @keyframes rotCounterClockwise { from { transform: rotateZ(360deg); } to { transform: rotateZ(0deg); } }
-        @keyframes pulseGlow { 0%, 100% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; filter: brightness(1.2); } }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
         @keyframes compute { from { height: 10%; } to { height: 100%; } }
+        @keyframes fadeLine { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
+
+    <div id="bootScreen">
+        <div style="color: #64748b; font-weight: bold; margin-bottom: 10px;">STARK INDUSTRIES SECURE BOOT v4.5</div>
+        <div id="bootLogs"></div>
+    </div>
 
     <div class="hud-panel panel-left">
         <div class="viewport-3d">
@@ -168,29 +120,28 @@
         </div>
         
         <div style="text-align: center; width: 100%;">
-            <h1 style="margin: 0; font-size: 20px; letter-spacing: 4px;" id="hudTitle">J.A.R.V.I.S.</h1>
-            <span style="font-size: 9px; color: #475569; letter-spacing: 1px;">COGNITIVE HUD ENGINE v4.5</span>
+            <h1 style="margin: 0; font-size: 18px; letter-spacing: 4px;" id="hudTitle">J.A.R.V.I.S.</h1>
+            <span style="font-size: 9px; color: #475569; letter-spacing: 1px;">DEVELOPER CORE OVERRIDE</span>
         </div>
 
         <div class="cmd-grid">
-            <div class="cmd-btn" onclick="acionarComando('jarvis')">➢ Iniciar</div>
-            <div class="cmd-btn" onclick="acionarComando('abrir câmera')">➢ Câmera</div>
-            <div class="cmd-btn" onclick="acionarComando('pesquisar homem de ferro')">➢ Pesquisar</div>
-            <div class="cmd-btn" onclick="acionarComando('ligar modo hacker')">➢ M. Hacker</div>
-            <div class="cmd-btn" onclick="acionarComando('desativar modo hacker')">➢ M. Stark</div>
-            <div class="cmd-btn" onclick="acionarComando('que horas são?')">➢ Horas</div>
+            <div class="cmd-btn" onclick="clicouComando('jarvis')">➢ Diagnóstico</div>
+            <div class="cmd-btn" onclick="clicouComando('status do sistema')">➢ Hardware Real</div>
+            <div class="cmd-btn" onclick="clicouComando('abrir câmera')">➢ Câmera</div>
+            <div class="cmd-btn" onclick="clicouComando('pesquisar armadura do homem de ferro')">➢ Pesquisar</div>
+            <div class="cmd-btn" onclick="clicouComando('ligar modo hacker')">➢ M. Hacker</div>
+            <div class="cmd-btn" onclick="clicouComando('desativar modo hacker')">➢ M. Stark</div>
         </div>
     </div>
 
     <div class="hud-panel panel-right">
         <div class="header-status">
-            <span>SYS_LOC: ONLINE</span>
+            <span>PERMISSÃO: DESENVOLVEDOR CREATOR</span>
             <span id="timeDisplay">00:00:00</span>
         </div>
 
-        <div class="console-box">
-            <div><span class="sys-label">[MONITOR]:</span> <span id="statusTxt">AGUARDANDO DIRETRIZ VETORIAL...</span></div>
-            <div style="margin-top: 10px;"><span class="sys-label">[JARVIS]:</span> <span id="outputTxt">Pronto para a ação, senhor.</span></div>
+        <div class="console-box" id="consoleBox">
+            <div class="log-line"><span class="sys-label">[SISTEMA]:</span> NÚCLEO ONLINE. BEM-VINDO DE VOLTA, SENHOR.</div>
         </div>
 
         <div class="data-visualizer">
@@ -202,36 +153,79 @@
 
         <div class="action-bar">
             <button class="ctrl-btn" onclick="escutarVoz()" id="micBtn">🎙️</button>
-            <input type="text" id="inputCmd" placeholder="Aguardando diretriz..." onkeypress="verificarEnter(event)">
+            <input type="text" id="inputCmd" placeholder="Digite uma ordem direta..." onkeypress="verificarEnter(event)">
             <button class="ctrl-btn" onclick="processarEnvio()">Exec</button>
         </div>
     </div>
 
+    <script src="capacitor.js"></script>
+
     <script>
-        // Relógio Dinâmico em Tempo Real
-        setInterval(() => {
-            document.getElementById('timeDisplay').innerText = new Date().toLocaleTimeString('pt-BR');
-        }, 1000);
+        // Animação de Inicialização Exclusiva (Boot Logs)
+        const logs = [
+            "Conectando ao núcleo central do Android...",
+            "Injetando overrides de privilégio de Criador...",
+            "Alinhando Reator Arc quântico... [OK]",
+            "Sincronizando bancos de dados locais...",
+            "Carregando sensores de telemetria de hardware...",
+            "ACESSO CONCEDIDO: Olá, Senhor Desenvolvedor!"
+        ];
+        let logIndex = 0;
+        function rodarBoot() {
+            if(logIndex < logs.length) {
+                document.getElementById('bootLogs').innerHTML += `<div>> ${logs[logIndex]}</div>`;
+                logIndex++;
+                setTimeout(rodarBoot, 400);
+            } else {
+                setTimeout(() => { document.getElementById('bootScreen').style.display = 'none'; }, 600);
+            }
+        }
+        window.onload = rodarBoot;
+
+        // Relógio
+        setInterval(() => { document.getElementById('timeDisplay').innerText = new Date().toLocaleTimeString('pt-BR'); }, 1000);
 
         function verificarEnter(e) { if (e.key === 'Enter') processarEnvio(); }
+        function clicouComando(txt) { acionarComando(txt); }
 
         function processarEnvio() {
             const caixa = document.getElementById('inputCmd');
             const cmd = caixa.value.trim();
             if(!cmd) return;
             caixa.value = "";
+            printConsole("[VOCÊ]", cmd.toUpperCase(), "user-label");
             acionarComando(cmd);
         }
 
-        function acionarComando(comandoBruto) {
+        function printConsole(autor, texto, classeLabel) {
+            const box = document.getElementById('consoleBox');
+            box.innerHTML += `<div class="log-line"><span class="${classeLabel}">[${autor}]:</span> ${texto}</div>`;
+            box.scrollTop = box.scrollHeight; // Rola o chat automático para baixo!
+        }
+
+        async function acionarComando(comandoBruto) {
             const t = comandoBruto.toLowerCase().trim();
-            document.getElementById('statusTxt').innerText = "VETOR DE ENTRADA: \"" + comandoBruto.toUpperCase() + "\"";
-            
-            let r = "Diretriz local não indexada nos meus bancos de dados, senhor.";
+            let r = "Diretriz não indexada nos meus bancos locais, senhor.";
+
+            // 🔋 Comando Secreto Avançado: Pegar bateria real do celular!
+            if (t.includes("status do sistema") || t.includes("bateria") || t.includes("hardware")) {
+                try {
+                    // Puxa o plugin nativo do Capacitor
+                    const info = await capacitor.Plugins.Device.getBatteryInfo();
+                    const nivel = Math.round(info.batteryLevel * 100);
+                    const carregando = info.isCharging ? "alimentado pela tomada" : "operando em modo dissipativo";
+                    r = `Status atual da armadura: Níveis de energia do celular em ${nivel} por cento, e o núcleo está ${carregando}, senhor.`;
+                } catch(e) {
+                    r = "Não consegui ler os sensores físicos de energia, mas a matriz quântica está estável.";
+                }
+                printConsole("JARVIS", r.toUpperCase(), "sys-label");
+                falar(r);
+                return;
+            }
 
             if (t.includes("câmera") || t.includes("camera")) {
                 r = "Inicializando hardware óptico nativo do Android.";
-                executarFeedback(r);
+                printConsole("JARVIS", r.toUpperCase(), "sys-label"); falar(r);
                 setTimeout(() => { window.location.href = "intent://#Intent;action=android.media.action.IMAGE_CAPTURE;end"; }, 1200);
                 return;
             }
@@ -239,33 +233,36 @@
             if (t.startsWith("pesquisar ")) {
                 const termo = t.replace("pesquisar ", "");
                 r = "Rastreando registros web para: " + termo;
-                executarFeedback(r);
+                printConsole("JARVIS", r.toUpperCase(), "sys-label"); falar(r);
                 setTimeout(() => { window.open("https://www.google.com/search?q=" + encodeURIComponent(termo), '_blank'); }, 1200);
                 return;
             }
 
             if (t.includes("modo hacker") || t.includes("hacker")) {
-                r = "Criptografia quântica ativa. Modificando espectro visual do painel central.";
+                r = "Criptografia ativa. Alterando espectro do terminal de comando.";
                 document.body.classList.add('hacker-mode');
                 document.getElementById('hudTitle').innerText = "MAINFRAME";
-            } else if (t.includes("stark") || t.includes("desativar modo hacker") || t.includes("normal")) {
+            } else if (t.includes("stark") || t.includes("normal") || t.includes("desativar")) {
                 r = "Restaurando frequência azul neon padrão das Indústrias Stark.";
                 document.body.classList.remove('hacker-mode');
                 document.getElementById('hudTitle').innerText = "J.A.R.V.I.S.";
             } else if (t.includes("olá") || t.includes("jarvis") || t.includes("iniciar")) {
-                r = "Todos os sistemas operando em perfeita simetria energética. À sua disposição.";
+                r = "Todos os sistemas operando com total eficiência energética. Que bom ver o senhor.";
             } else if (t.includes("horas") || t.includes("tempo")) {
-                r = "Cronômetro interno indica exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) + ".";
+                r = "São exatamente " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}) + " no fuso local.";
+            } else if (t.includes("limpar") || t.includes("resetar")) {
+                document.getElementById('consoleBox').innerHTML = '<div class="log-line"><span class="sys-label">[SISTEMA]:</span> CONSOLE REINICIADO.</div>';
+                return;
             }
 
-            executarFeedback(r);
+            printConsole("JARVIS", r.toUpperCase(), "sys-label");
+            falar(r);
         }
 
-        function executarFeedback(resposta) {
-            document.getElementById('outputTxt').innerText = resposta;
+        function falar(textoParaFalar) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                const fala = new SpeechSynthesisUtterance(resposta);
+                const fala = new SpeechSynthesisUtterance(textoParaFalar);
                 fala.lang = 'pt-BR'; fala.rate = 1.15;
                 window.speechSynthesis.speak(fala);
             }
@@ -276,10 +273,14 @@
             if (!SpeechRecognition) return;
             const rec = new SpeechRecognition();
             rec.lang = 'pt-BR';
-            document.getElementById('statusTxt').innerText = "CAPTURANDO FREQUÊNCIA ACÚSTICA...";
             document.getElementById('micBtn').innerText = "🛑";
             rec.start();
-            rec.onresult = (e) => { acionarComando(e.results[0][0].transcript); document.getElementById('micBtn').innerText = "🎙️"; };
+            rec.onresult = (e) => { 
+                const voz = e.results[0][0].transcript;
+                printConsole("[VOCÊ]", voz.toUpperCase(), "user-label");
+                acionarComando(voz); 
+                document.getElementById('micBtn').innerText = "🎙️"; 
+            };
             rec.onerror = () => { document.getElementById('micBtn').innerText = "🎙️"; };
         }
     </script>
